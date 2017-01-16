@@ -15,19 +15,31 @@ public class Main {
 	 * as the second argument.
 	 */
 	public static void main(String[] args) throws NoSimilarWordFoundException, IOException {
+
+		String addWord = args[0];
+		String searchWord = args[1];
 		
-		String dictionaryFileName = args[0];
-		String inputWord = args[1];
+		Trie words = new Trie();
+		words.add( addWord );
+		Trie.INode node = words.find( searchWord );
+		if( node == null ) {
+			System.out.println( "fail" );
+		}else {
+			System.out.println( "success" );
+		}
 		
-		/**
-		 * Create an instance of your corrector here
-		 */
-		ISpellCorrector corrector = new SpellCorrector();
-		
-		corrector.useDictionary( dictionaryFileName );
-		String suggestion = corrector.suggestSimilarWord( inputWord );
-		
-		System.out.println( "Suggestion is: " + suggestion );
+//		String dictionaryFileName = args[0];
+//		String inputWord = args[1];
+//		
+//		/**
+//		 * Create an instance of your corrector here
+//		 */
+//		ISpellCorrector corrector = new SpellCorrector();
+//		
+//		corrector.useDictionary( dictionaryFileName );
+//		String suggestion = corrector.suggestSimilarWord( inputWord );
+//		
+//		System.out.println( "Suggestion is: " + suggestion );
 	}
 
 }
