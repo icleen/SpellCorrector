@@ -4,17 +4,22 @@ public class Trie implements ITrie {
 	
 	private final int LETTER_MIN = 97;
 	
+	private int count;
+	private int nodeCount;
+	
 	wordNode root;
 	
 	public Trie() {
 		root = new wordNode();
+		count = 0;
+		nodeCount = 0;
 	}
 
 	@Override
 	public void add(String word) {
 		
-		recursiveAdd( word, root );
-		
+		recursiveAdd( word.toLowerCase(), root );
+		count++;
 //		char c;
 //		int index;
 //		for( int i = 0; i < word.length(); i++ ) {
@@ -27,7 +32,10 @@ public class Trie implements ITrie {
 	private void recursiveAdd( String word, wordNode node ) {
 		char c = word.charAt( 0 );
 		int index = c - LETTER_MIN;
-		node.nodes[index] = new wordNode( c );
+		if( node.nodes[index] == null ) {
+			node.nodes[index] = new wordNode( c );
+			nodeCount++;
+		}
 		if( word.length() > 0 ) {
 			recursiveAdd( word.substring( 1 ), node.nodes[index] );
 		}
@@ -35,20 +43,31 @@ public class Trie implements ITrie {
 
 	@Override
 	public INode find(String word) {
-		// TODO Auto-generated method stub
-		return null;
+		return recursiveFind( word.toLowerCase(), root );
+	}
+	
+	private wordNode recursiveFind( String word, wordNode node ) {
+		
+		char c = word.charAt( 0 );
+		int index = c - LETTER_MIN;
+		if( node.nodes[index] == null ) {
+			return null;
+		}
+		if( word.length() > 0 ) {
+			return recursiveFind( word.substring( 1 ), node.nodes[index] );
+		}
+		
+		return node.nodes[index];
 	}
 
 	@Override
 	public int getWordCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return count;
 	}
 
 	@Override
 	public int getNodeCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return nodeCount;
 	}
 	
 	public class wordNode implements ITrie.INode {
