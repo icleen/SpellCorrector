@@ -27,8 +27,10 @@ public class SpellCorrector implements ISpellCorrector {
 
 	@Override
 	public String suggestSimilarWord(String inputWord) throws NoSimilarWordFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		if( dictionary.find( inputWord ) != null ) {
+			return "That word is in the dictionary!";
+		}
+		return "Word not found";
 	}
 
 }
