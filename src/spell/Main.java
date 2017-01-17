@@ -34,6 +34,11 @@ public class Main {
 		String dictionaryFileName = args[0];
 		String inputWord = args[1];
 		
+//		String temp = "";
+//		for( int i = 0; i < inputWord.length(); i++ ) {
+//			temp = inputWord.substring( 0, i ) + inputWord.substring( i + 1 );
+//			System.out.println( temp );
+//		}
 		/**
 		 * Create an instance of your corrector here
 		 */

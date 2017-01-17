@@ -30,7 +30,7 @@ public class Trie implements ITrie {
 	}
 	
 	private void recursiveAdd( String word, wordNode node ) {
-		System.out.println( word );
+//		System.out.println( word );
 		char c = word.charAt( 0 );
 		int index = c - LETTER_MIN;
 		if( node.nodes[index] == null ) {
@@ -50,7 +50,7 @@ public class Trie implements ITrie {
 	}
 	
 	private wordNode recursiveFind( String word, wordNode node ) {
-		System.out.println( word );
+//		System.out.println( word );
 		char c = word.charAt( 0 );
 		int index = c - LETTER_MIN;
 		if( node.nodes[index] == null ) {
