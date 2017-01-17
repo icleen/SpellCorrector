@@ -1,13 +1,28 @@
 package spell;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class SpellCorrector implements ISpellCorrector {
 
+	private Trie dictionary;
+	
+	public SpellCorrector() {
+		dictionary = new Trie();
+	}
+	
 	@Override
 	public void useDictionary(String dictionaryFileName) throws IOException {
-		// TODO Auto-generated method stub
+		Scanner scanner = new Scanner(
+										new BufferedReader(
+												new FileReader( dictionaryFileName )));
 		
+		while( scanner.hasNext() ) {
+			dictionary.add( scanner.next() );
+		}
+		scanner.close();
 	}
 
 	@Override
