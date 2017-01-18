@@ -5,23 +5,27 @@ import java.util.ArrayList;
 public class Trie implements ITrie {
 	
 	private final int LETTER_MIN = 97;
+	private final int ALPHABET = 26;
 	
 	private int nodeCount;
+	private int wordCount;
 	
 	wordNode root;
+	
+	StringBuilder output;
 	
 	ArrayList<String> words;
 	
 	public Trie() {
 		root = new wordNode();
 		nodeCount = 0;
-		words = new ArrayList<String>();
+		wordCount = 0;
 	}
 
 	@Override
 	public void add(String word) {
 		recursiveAdd( word.toLowerCase(), root );
-		words.add( word );
+		wordCount++;
 	}
 	
 	private void recursiveAdd( String word, wordNode node ) {
@@ -62,7 +66,7 @@ public class Trie implements ITrie {
 
 	@Override
 	public int getWordCount() {
-		return words.size();
+		return wordCount;
 	}
 
 	@Override
@@ -70,16 +74,52 @@ public class Trie implements ITrie {
 		return nodeCount;
 	}
 	
+	//***********************************************************
+	// my toString function
+	//***********************************************************
+	
 	@Override
 	public String toString() {
-		return words.toString();
-//		StringBuilder output = new StringBuilder();
-//		for( int i = 0; i < words.size(); i++ ) {
-//			output.append( words.get(i) );
-//		}
-//		return output.toString();
+		output = new StringBuilder();
+		StringBuilder word = new StringBuilder();
+		for( int i = 0; i < ALPHABET; i++ ) {
+			recursiveToString( root.nodes[i], word );
+		}
+		return output.toString();
 	}
 	
+	private void recursiveToString( wordNode node, StringBuilder word ) {
+		if ( node == null ) {
+			return;
+		}
+		word.append( node.getLetter() );
+		if ( node.getValue() > 0 ) {
+			output.append( word + "\n" );
+		}
+		for( int i = 0; i < ALPHABET; i++ ) {
+			recursiveToString( node.nodes[i], word );
+		}
+		word.deleteCharAt( word.length() - 1 );		// deletes the last char added, which would be the one added in this call of the recursive function
+	}
+	
+	@Override
+	public int hashCode() {
+		return 0;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		String current = this.toString();
+		String test = o.toString();
+		if( current.equals( test ) ) {
+			return true;
+		}
+		return false;
+	}
+	
+//*****************************************************
+//	my implementation of the node class
+//*****************************************************
 	public class wordNode implements ITrie.INode {
 
 		public int frequency;
@@ -88,6 +128,7 @@ public class Trie implements ITrie {
 		public wordNode[] nodes;
 		
 		public wordNode() {
+			letter = 0;
 			nodes = new wordNode[26];
 			frequency = 0;
 		}

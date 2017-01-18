@@ -1,6 +1,9 @@
 package spell;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import spell.ISpellCorrector.NoSimilarWordFoundException;
 
@@ -45,6 +48,11 @@ public class Main {
 		ISpellCorrector corrector = new SpellCorrector();
 		
 		corrector.useDictionary( dictionaryFileName );
+		PrintWriter writer = new PrintWriter( 
+				new BufferedWriter( 
+						new FileWriter( "spell/output.txt" ) ) );
+		writer.print( corrector.toString() );
+		writer.close();
 		String suggestion = corrector.suggestSimilarWord( inputWord );
 		if( inputWord.equals( suggestion ) ) {
 			System.out.println( inputWord.toLowerCase() );

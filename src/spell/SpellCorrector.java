@@ -182,5 +182,10 @@ public class SpellCorrector implements ISpellCorrector {
 			}
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return dictionary.toString();
+	}
 
 }
