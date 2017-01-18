@@ -19,7 +19,6 @@ public class SpellCorrector implements ISpellCorrector {
 	
 	public SpellCorrector() {
 		dictionary = new Trie();
-		output = "";
 		highestFrequency = 0;
 	}
 	
@@ -45,10 +44,12 @@ public class SpellCorrector implements ISpellCorrector {
 		if( answer != null ) {
 			return answer;
 		}
-//		else {
-//			throw null;
-//		}
-		return "Word not found";
+		degree = 2;
+		answer = findDistance( inputWord.toLowerCase(), degree );
+		if( answer != null ) {
+			return answer;
+		}
+		throw new NoSimilarWordFoundException();
 	}
 	
 	private String findDistance( String word, int degree ) {
@@ -70,6 +71,7 @@ public class SpellCorrector implements ISpellCorrector {
 			if( tempNode != null && tempNode.getValue() > highestFrequency ) {
 				highestFrequency = tempNode.getValue();
 				output = temp;
+				System.out.println( "deletion, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
 			}
 		}
 	}
@@ -93,6 +95,7 @@ public class SpellCorrector implements ISpellCorrector {
 			if( tempNode != null && tempNode.getValue() > highestFrequency ) {
 				highestFrequency = tempNode.getValue();
 				output = tempString.toString();
+				System.out.println( "transposition, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
 			}
 		}
 	}
@@ -100,17 +103,39 @@ public class SpellCorrector implements ISpellCorrector {
 	private void alteration( String word, int degree) {
 		StringBuilder save = null;
 		Trie.wordNode tempNode = null;
-		char c = 0;
-		for( int j = 0; j < word.length(); j++ ) {
-			save = new StringBuilder( word );
-			for( int i = 0; i < ALPHABET; i++ ) {
-				c = (char) (LETTER_MIN + i);
-				save.setCharAt( j, c );
-//				System.out.println( save.toString() );
-				tempNode = (wordNode) dictionary.find( save.toString() );
-				if( tempNode != null && tempNode.getValue() > highestFrequency ) {
-					highestFrequency = tempNode.getValue();
-					output = save.toString();
+		char c = 0, d = 0;
+		if( degree == 1 ) {
+			for( int i = 0; i < word.length(); i++ ) {
+				save = new StringBuilder( word );
+				for( int j = 0; j < ALPHABET; j++ ) {
+					c = (char) (LETTER_MIN + j);
+					save.setCharAt( i, c );
+//					System.out.println( save.toString() );
+					tempNode = (wordNode) dictionary.find( save.toString() );
+					if( tempNode != null && tempNode.getValue() > highestFrequency ) {
+						highestFrequency = tempNode.getValue();
+						output = save.toString();
+						System.out.println( "alteration, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
+					}
+				}
+			}
+		}else if ( degree == 2 ) {
+			for( int i = 0; i < word.length() - 1; i++ ) {
+				save = new StringBuilder( word );
+				for( int j = 0; j < ALPHABET; j++ ) {
+					for( int k = 0; k < ALPHABET; k++ ) {
+						c = (char) (LETTER_MIN + j);
+						d = (char) (LETTER_MIN + k);
+						save.setCharAt( i, c );
+						save.setCharAt( i + 1, d );
+//						System.out.println( save.toString() );
+						tempNode = (wordNode) dictionary.find( save.toString() );
+						if( tempNode != null && tempNode.getValue() > highestFrequency ) {
+							highestFrequency = tempNode.getValue();
+							output = save.toString();
+							System.out.println( "alteration, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
+						}
+					}
 				}
 			}
 		}
@@ -118,7 +143,44 @@ public class SpellCorrector implements ISpellCorrector {
 	}
 	
 	private void insertion( String word, int degree ) {
-		
+		StringBuilder save = null;
+		Trie.wordNode tempNode = null;
+		char c = 0, d = 0;
+		if( degree == 1 ) {
+			for( int i = 0; i <= word.length(); i++ ) {
+				for( int j = 0; j < ALPHABET; j++ ) {
+					save = new StringBuilder( word );
+					c = (char) (LETTER_MIN + j);
+					save.insert( i, c );
+//					System.out.println( save.toString() );
+					tempNode = (wordNode) dictionary.find( save.toString() );
+					if( tempNode != null && tempNode.getValue() > highestFrequency ) {
+						highestFrequency = tempNode.getValue();
+						output = save.toString();
+						System.out.println( "insertion, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
+					}
+				}
+			}
+		}else if( degree == 2 ) {
+			for( int i = 0; i <= word.length(); i++ ) {
+				for( int j = 0; j < ALPHABET; j++ ) {
+					for( int k = 0; k < ALPHABET; k++ ) {
+						save = new StringBuilder( word );
+						c = (char) (LETTER_MIN + j);
+						d = (char) (LETTER_MIN + k);
+						save.insert( i, c );
+						save.insert( i, d );
+//						System.out.println( save.toString() );
+						tempNode = (wordNode) dictionary.find( save.toString() );
+						if( tempNode != null && tempNode.getValue() > highestFrequency ) {
+							highestFrequency = tempNode.getValue();
+							output = save.toString();
+							System.out.println( "insertion, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
+						}
+					}
+				}
+			}
+		}
 	}
 
 }
