@@ -14,7 +14,7 @@ public class SpellCorrector implements ISpellCorrector {
 	
 	private Trie dictionary;
 	
-	private String output;
+	private String suggestion;
 	private int highestFrequency;
 	
 	public SpellCorrector() {
@@ -58,7 +58,7 @@ public class SpellCorrector implements ISpellCorrector {
 		alteration( word, degree );
 		insertion( word, degree );
 		
-		return output;
+		return suggestion;
 	}
 	
 	private void deletion( String word,  int degree ) {
@@ -70,8 +70,8 @@ public class SpellCorrector implements ISpellCorrector {
 			tempNode = (wordNode) dictionary.find( temp );
 			if( tempNode != null && tempNode.getValue() > highestFrequency ) {
 				highestFrequency = tempNode.getValue();
-				output = temp;
-				System.out.println( "deletion, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
+				suggestion = temp;
+//				System.out.println( "deletion, frequency, degree: " + suggestion + ", " + highestFrequency + ", " + degree );
 			}
 		}
 	}
@@ -92,10 +92,18 @@ public class SpellCorrector implements ISpellCorrector {
 			tempString.append( temp );
 			
 			tempNode = (wordNode) dictionary.find( tempString.toString() );
-			if( tempNode != null && tempNode.getValue() > highestFrequency ) {
-				highestFrequency = tempNode.getValue();
-				output = tempString.toString();
-				System.out.println( "transposition, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
+			if( tempNode != null && tempNode.getValue() >= highestFrequency ) {
+				if( tempNode.getValue() == highestFrequency ) {
+					int test = suggestion.compareTo( tempString.toString() );
+					if( test > 0 ) {
+						highestFrequency = tempNode.getValue();
+						suggestion = tempString.toString();
+					}
+				}else {
+					highestFrequency = tempNode.getValue();
+					suggestion = tempString.toString();
+				}
+//				System.out.println( "transposition, frequency, degree: " + suggestion + ", " + highestFrequency + ", " + degree );
 			}
 		}
 	}
@@ -112,10 +120,18 @@ public class SpellCorrector implements ISpellCorrector {
 					save.setCharAt( i, c );
 //					System.out.println( save.toString() );
 					tempNode = (wordNode) dictionary.find( save.toString() );
-					if( tempNode != null && tempNode.getValue() > highestFrequency ) {
-						highestFrequency = tempNode.getValue();
-						output = save.toString();
-						System.out.println( "alteration, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
+					if( tempNode != null && tempNode.getValue() >= highestFrequency ) {
+						if( tempNode.getValue() == highestFrequency ) {
+							int test = suggestion.compareTo( save.toString() );
+							if( test > 0 ) {
+								highestFrequency = tempNode.getValue();
+								suggestion = save.toString();
+							}
+						}else {
+							highestFrequency = tempNode.getValue();
+							suggestion = save.toString();
+						}
+//						System.out.println( "alteration, frequency, degree: " + suggestion + ", " + highestFrequency + ", " + degree );
 					}
 				}
 			}
@@ -130,10 +146,18 @@ public class SpellCorrector implements ISpellCorrector {
 						save.setCharAt( i + 1, d );
 //						System.out.println( save.toString() );
 						tempNode = (wordNode) dictionary.find( save.toString() );
-						if( tempNode != null && tempNode.getValue() > highestFrequency ) {
-							highestFrequency = tempNode.getValue();
-							output = save.toString();
-							System.out.println( "alteration, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
+						if( tempNode != null && tempNode.getValue() >= highestFrequency ) {
+							if( tempNode.getValue() == highestFrequency ) {
+								int test = suggestion.compareTo( save.toString() );
+								if( test > 0 ) {
+									highestFrequency = tempNode.getValue();
+									suggestion = save.toString();
+								}
+							}else {
+								highestFrequency = tempNode.getValue();
+								suggestion = save.toString();
+							}
+//							System.out.println( "alteration, frequency, degree: " + suggestion + ", " + highestFrequency + ", " + degree );
 						}
 					}
 				}
@@ -154,10 +178,18 @@ public class SpellCorrector implements ISpellCorrector {
 					save.insert( i, c );
 //					System.out.println( save.toString() );
 					tempNode = (wordNode) dictionary.find( save.toString() );
-					if( tempNode != null && tempNode.getValue() > highestFrequency ) {
-						highestFrequency = tempNode.getValue();
-						output = save.toString();
-						System.out.println( "insertion, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
+					if( tempNode != null && tempNode.getValue() >= highestFrequency ) {
+						if( tempNode.getValue() == highestFrequency ) {
+							int test = suggestion.compareTo( save.toString() );
+							if( test > 0 ) {
+								highestFrequency = tempNode.getValue();
+								suggestion = save.toString();
+							}
+						}else {
+							highestFrequency = tempNode.getValue();
+							suggestion = save.toString();
+						}
+//						System.out.println( "insertion, frequency, degree: " + suggestion + ", " + highestFrequency + ", " + degree );
 					}
 				}
 			}
@@ -173,9 +205,17 @@ public class SpellCorrector implements ISpellCorrector {
 //						System.out.println( save.toString() );
 						tempNode = (wordNode) dictionary.find( save.toString() );
 						if( tempNode != null && tempNode.getValue() > highestFrequency ) {
-							highestFrequency = tempNode.getValue();
-							output = save.toString();
-							System.out.println( "insertion, frequency, degree: " + output + ", " + highestFrequency + ", " + degree );
+							if( tempNode.getValue() == highestFrequency ) {
+								int test = suggestion.compareTo( save.toString() );
+								if( test > 0 ) {
+									highestFrequency = tempNode.getValue();
+									suggestion = save.toString();
+								}
+							}else {
+								highestFrequency = tempNode.getValue();
+								suggestion = save.toString();
+							}
+//							System.out.println( "insertion, frequency, degree: " + suggestion + ", " + highestFrequency + ", " + degree );
 						}
 					}
 				}
