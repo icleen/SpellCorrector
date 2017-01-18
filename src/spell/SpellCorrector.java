@@ -3,7 +3,6 @@ package spell;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import spell.Trie.wordNode;
@@ -12,8 +11,13 @@ public class SpellCorrector implements ISpellCorrector {
 
 	private Trie dictionary;
 	
+	private String output;
+	private int highestFrequency;
+	
 	public SpellCorrector() {
 		dictionary = new Trie();
+		output = "";
+		highestFrequency = 0;
 	}
 	
 	@Override
@@ -33,7 +37,8 @@ public class SpellCorrector implements ISpellCorrector {
 		if( dictionary.find( inputWord ) != null ) {
 			return "That word is in the dictionary!";
 		}
-		String answer = findDistance( inputWord );
+		int degree = 1;
+		String answer = findDistance( inputWord.toLowerCase(), degree );
 		if( answer != null ) {
 			return answer;
 		}
@@ -43,37 +48,50 @@ public class SpellCorrector implements ISpellCorrector {
 		return "Word not found";
 	}
 	
-	private String findDistance( String word ) {
-		int delHigh = 0, tranHigh = 0, altHigh = 0, insertHigh = 0;
-		String deleter = deletion( word, delHigh );
-//		Trie.wordNode transposer = transposition();
-//		Trie.wordNode alterator = alteration();
-//		Trie.wordNode inserter = insertion();
-//		if( deleter.getValue() > transposer.getValue() && deleter.getValue() > alterater.getValue() && deleter.getValue() > inserter.getValue() ) {
-//			return deleter.toString();
-//		}
-		return deleter;
+	private String findDistance( String word, int degree ) {
+		deletion( word, degree );
+		transposition( word, degree );
+		alteration();
+		insertion();
+		
+		return output;
 	}
 	
-	private String deletion( String word, int highestValue ) {
-		String temp = "", lastString = "";
+	private void deletion( String word,  int degree ) {
+		String temp = "";
 		Trie.wordNode tempNode = null;
-		for( int i = 0; i < word.length(); i++ ) {
-			temp = word.substring( 0, i ) + word.substring( i + 1 );
+		for( int i = 0; i < word.length() + 1 - degree; i++ ) {
+			temp = word.substring( 0, i ) + word.substring( i + degree );
+//			System.out.println( temp );
 			tempNode = (wordNode) dictionary.find( temp );
-			if( tempNode != null && tempNode.getValue() > highestValue ) {
-				highestValue = tempNode.getValue();
-				lastString = temp;
+			if( tempNode != null && tempNode.getValue() > highestFrequency ) {
+				highestFrequency = tempNode.getValue();
+				output = temp;
 			}
 		}
-//		System.out.println( lastString );
-		return lastString;
 	}
 	
-	private String transposition() {
-		
-		
-		return null;
+	private void transposition( String word,  int degree ) {
+		StringBuilder tempString = null;
+		char[] save = word.toCharArray();
+		char[] temp = null;
+		char oldChar = 0, newChar = 0;
+		Trie.wordNode tempNode = null;
+		for( int i = 0; i < save.length - degree; i++ ) {
+			tempString = new StringBuilder();
+			temp = save.clone();
+			oldChar = save[i];
+			newChar = save[i + degree];
+			temp[i] = newChar;
+			temp[i + degree] = oldChar;
+			tempString.append( temp );
+			
+			tempNode = (wordNode) dictionary.find( tempString.toString() );
+			if( tempNode != null && tempNode.getValue() > highestFrequency ) {
+				highestFrequency = tempNode.getValue();
+				output = tempString.toString();
+			}
+		}
 	}
 	
 	private String alteration() {
