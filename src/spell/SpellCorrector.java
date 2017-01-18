@@ -9,6 +9,9 @@ import spell.Trie.wordNode;
 
 public class SpellCorrector implements ISpellCorrector {
 
+	private final int ALPHABET = 26;
+	private final int LETTER_MIN = 97;
+	
 	private Trie dictionary;
 	
 	private String output;
@@ -51,8 +54,8 @@ public class SpellCorrector implements ISpellCorrector {
 	private String findDistance( String word, int degree ) {
 		deletion( word, degree );
 		transposition( word, degree );
-		alteration();
-		insertion();
+		alteration( word, degree );
+		insertion( word, degree );
 		
 		return output;
 	}
@@ -94,16 +97,28 @@ public class SpellCorrector implements ISpellCorrector {
 		}
 	}
 	
-	private String alteration() {
+	private void alteration( String word, int degree) {
+		StringBuilder save = null;
+		Trie.wordNode tempNode = null;
+		char c = 0;
+		for( int j = 0; j < word.length(); j++ ) {
+			save = new StringBuilder( word );
+			for( int i = 0; i < ALPHABET; i++ ) {
+				c = (char) (LETTER_MIN + i);
+				save.setCharAt( j, c );
+//				System.out.println( save.toString() );
+				tempNode = (wordNode) dictionary.find( save.toString() );
+				if( tempNode != null && tempNode.getValue() > highestFrequency ) {
+					highestFrequency = tempNode.getValue();
+					output = save.toString();
+				}
+			}
+		}
 		
-		
-		return null;
 	}
 	
-	private String insertion() {
+	private void insertion( String word, int degree ) {
 		
-		
-		return null;
 	}
 
 }
