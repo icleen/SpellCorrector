@@ -1,32 +1,27 @@
 package spell;
 
+import java.util.ArrayList;
+
 public class Trie implements ITrie {
 	
 	private final int LETTER_MIN = 97;
 	
-	private int count;
 	private int nodeCount;
 	
 	wordNode root;
 	
+	ArrayList<String> words;
+	
 	public Trie() {
 		root = new wordNode();
-		count = 0;
 		nodeCount = 0;
+		words = new ArrayList<String>();
 	}
 
 	@Override
 	public void add(String word) {
-		
 		recursiveAdd( word.toLowerCase(), root );
-		count++;
-//		char c;
-//		int index;
-//		for( int i = 0; i < word.length(); i++ ) {
-//			c = word.charAt( i );
-//			index = c - LETTER_MIN;
-//			root.nodes[index] = new wordNode( c );
-//		}
+		words.add( word );
 	}
 	
 	private void recursiveAdd( String word, wordNode node ) {
@@ -67,12 +62,22 @@ public class Trie implements ITrie {
 
 	@Override
 	public int getWordCount() {
-		return count;
+		return words.size();
 	}
 
 	@Override
 	public int getNodeCount() {
 		return nodeCount;
+	}
+	
+	@Override
+	public String toString() {
+		return words.toString();
+//		StringBuilder output = new StringBuilder();
+//		for( int i = 0; i < words.size(); i++ ) {
+//			output.append( words.get(i) );
+//		}
+//		return output.toString();
 	}
 	
 	public class wordNode implements ITrie.INode {

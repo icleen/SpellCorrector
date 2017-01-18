@@ -37,7 +37,7 @@ public class SpellCorrector implements ISpellCorrector {
 	@Override
 	public String suggestSimilarWord(String inputWord) throws NoSimilarWordFoundException {
 		if( dictionary.find( inputWord ) != null ) {
-			return "That word is in the dictionary!";
+			return inputWord;
 		}
 		int degree = 1;
 		String answer = findDistance( inputWord.toLowerCase(), degree );
