@@ -18,7 +18,7 @@ public class Trie implements ITrie {
 	
 	public Trie() {
 		root = new wordNode();
-		nodeCount = 0;
+		nodeCount = 1;
 		wordCount = 0;
 	}
 
@@ -104,7 +104,7 @@ public class Trie implements ITrie {
 	
 	@Override
 	public int hashCode() {
-		return 0;
+		return wordCount * nodeCount * 29;
 	}
 	
 	@Override
