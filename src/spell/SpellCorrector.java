@@ -191,5 +191,19 @@ public class SpellCorrector implements ISpellCorrector {
 	public String toString() {
 		return dictionary.toString();
 	}
+	
+	@Override
+	public boolean equals( Object o ) {
+		if( o == null || !SpellCorrector.class.isAssignableFrom( o.getClass() ) ) {
+//			System.out.println( "They aren't the same SpellCorrector" );
+			return false;
+		}
+		SpellCorrector check = (SpellCorrector) o;
+		return dictionary.equals( check.getDictionary() );
+	}
+	
+	public Trie getDictionary() {
+		return dictionary;
+	}
 
 }

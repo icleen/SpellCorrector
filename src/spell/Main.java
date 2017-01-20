@@ -35,6 +35,8 @@ public class Main {
 //		
 		
 		String dictionaryFileName = args[0];
+		String dictionaryFileName1 = "spell/wordsTest.txt";
+		String dictionaryFileName2 = "spell/wordsTest2.txt";
 		String inputWord = args[1];
 		
 //		String temp = "";
@@ -46,8 +48,13 @@ public class Main {
 		 * Create an instance of your corrector here
 		 */
 		ISpellCorrector corrector = new SpellCorrector();
-		
+		ISpellCorrector check = new SpellCorrector();
+		ISpellCorrector check1 = new SpellCorrector();
+		ISpellCorrector check2 = new SpellCorrector();
 		corrector.useDictionary( dictionaryFileName );
+		check.useDictionary( dictionaryFileName );
+		check1.useDictionary( dictionaryFileName1 );
+		check2.useDictionary( dictionaryFileName2 );
 		PrintWriter writer = new PrintWriter( 
 				new BufferedWriter( 
 						new FileWriter( "spell/output.txt" ) ) );
@@ -59,6 +66,16 @@ public class Main {
 		}else {
 			System.out.println( "Suggestion is: " + suggestion );
 		}
+		System.out.print( "Check: " );
+		System.out.println( corrector.equals( check ) );
+		System.out.print( "Check1: " );
+		System.out.println( corrector.equals( check1 ) );
+		System.out.print( "Check2: " );
+		System.out.println( corrector.equals( check2 ) );
+		System.out.print( "Check other: " );
+		System.out.println( corrector.equals( dictionaryFileName ) );
+		System.out.print( "Check null: " );
+		System.out.println( corrector.equals( null ) );
 	}
 
 }

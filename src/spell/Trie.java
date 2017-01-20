@@ -109,12 +109,40 @@ public class Trie implements ITrie {
 	
 	@Override
 	public boolean equals(Object o) {
-		String current = this.toString();
-		String test = o.toString();
-		if( current.equals( test ) ) {
-			return true;
+		if( o == null || !Trie.class.isAssignableFrom( o.getClass() ) ) {
+//			System.out.println( "They aren't the same Trie" );
+			return false;
 		}
-		return false;
+		Trie temp = (Trie) o;
+//		System.out.println( "Start recusion" );
+		return equalRecursive( root, temp.getRoot() );
+	}
+	
+	private boolean equalRecursive( wordNode myNode, wordNode testNode ) {
+		if( testNode == null || myNode == null ){
+			if( testNode == null && myNode == null ) {
+				return true;
+			}else {
+//				System.out.println( "One was null" );
+				return false;
+			}
+		}
+		if( myNode.getValue() != testNode.getValue() ) {
+//			System.out.println( "Value difference" );
+			return false;
+		}
+		boolean result;
+		for( int i = 0; i < ALPHABET; i++ ) {
+			result = equalRecursive( myNode.nodes[i], testNode.nodes[i] );
+			if( !result ) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public wordNode getRoot() {
+		return root;
 	}
 	
 //*****************************************************
