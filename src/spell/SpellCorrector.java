@@ -42,6 +42,9 @@ public class SpellCorrector implements ISpellCorrector {
 
 	@Override
 	public String suggestSimilarWord(String inputWord) throws NoSimilarWordFoundException {
+		if(inputWord.equals("")) {
+			throw new NoSimilarWordFoundException();
+		}
 		if( dictionary.find( inputWord ) != null ) {
 			return inputWord;
 		}
@@ -75,6 +78,10 @@ public class SpellCorrector implements ISpellCorrector {
 	}
 	
 	private void deletion( String word, int degree ) {
+		if( word.length() == 1 ) {
+			return;
+			
+		}
 		String temp = "";
 		Trie.wordNode tempNode = null;
 		for( int i = 0; i < word.length(); i++ ) {
